@@ -9,16 +9,29 @@ import SwiftUI
 
 struct EventCapsule: View {
     @State private var isChecked = false
+    var event: Event
+    
     var body: some View {
         ZStack {
             HStack {
-                Image(systemName: "clock").font(.iconText).foregroundStyle(Color.main)
+                Image(systemName: event.icon).font(.iconText).foregroundStyle(event.colour)
                 VStack (alignment:.leading){
-                    Text("4 hrs").font(.smallText).foregroundColor(Color("MainColor"))
-                    Text("Work").font(.strongText).foregroundStyle(Color.black)
+                    Text(formatDuration(event.duration)).font(.smallText).foregroundColor(Color("MainColor"))
+                    Text(event.name).font(.strongText).foregroundStyle(Color.black)
                     HStack {
-                        Image(systemName: "lock")
-                        Text("Time + Duration")
+                        if event.isTimeLocked || event.isDurationLocked{
+                            Image(systemName: "lock")
+                        } else {
+                            Image(systemName: "lock.open")
+                        }
+                        if event.isTimeLocked && event.isDurationLocked {
+                            Text("Time + Duration")
+                        } else if event.isTimeLocked {
+                            Text("Time")
+                        } else if event.isDurationLocked {
+                            Text("Duration")
+                        }
+                        
                     }.font(.smallText).foregroundStyle(Color.main)
                 }
                 
@@ -26,7 +39,9 @@ struct EventCapsule: View {
                 Toggle(isOn: $isChecked) {
                     
                 }.toggleStyle(.checkcircle)
-
+                    .onChange(of: isChecked) { newValue in
+                        event.isComplete = newValue
+                    }
             }
         }
         .padding()
@@ -37,7 +52,7 @@ struct EventCapsule: View {
 }
 
 #Preview {
-    EventCapsule()
+    EventCapsule(event: Event.createDummyEvents()[0])
 }
 
 struct CheckboxToggleStyle: ToggleStyle {

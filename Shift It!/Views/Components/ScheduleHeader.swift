@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct ScheduleHeader: View {
-    let dates: [Date] = {
-        let calendar = Calendar.current
-        let today = Date()
-        let lower = Calendar.current.date(byAdding: .day, value: -15, to: Date())
-        return (0..<30).compactMap{ calendar.date(byAdding: .day, value: $0, to: lower ?? Date()) }
-    }()
+    @State private var selectedDayIndex: Int = 3
+    @State private var currentWeekOffset: Int = 0
+    @State private var isDragging: Bool = false
     
     var body: some View {
+        let currentWeekDates = generateWeekDates(weekOffset: currentWeekOffset)
+        
         VStack {
             HStack {
                 Button(action: {}, label: {
@@ -23,51 +22,88 @@ struct ScheduleHeader: View {
                 })
                 Spacer()
                 VStack {
-                    Text("Today").font(.titleText)
-                    Text("September 28 2024").font(.subtitle).foregroundColor(Color("MainColor")).uppercaseStyle()
+                    if currentWeekDates[selectedDayIndex].isSameDay(as: Date()) {
+                        Text("Today").font(.titleText)
+                        Text(currentWeekDates[selectedDayIndex].formattedDate()).font(.subtitle).foregroundColor(Color("MainColor")).uppercaseStyle()
+                    } else if currentWeekDates[selectedDayIndex].isPreviousDay(from: Date()) {
+                        Text("Yesterday").font(.titleText)
+                        Text(currentWeekDates[selectedDayIndex].formattedDate()).font(.subtitle).foregroundColor(Color("MainColor")).uppercaseStyle()
+                    } else if currentWeekDates[selectedDayIndex].isNextDay(from: Date()) {
+                        Text("Tomorrow").font(.titleText)
+                        Text(currentWeekDates[selectedDayIndex].formattedDate()).font(.subtitle).foregroundColor(Color("MainColor")).uppercaseStyle()
+                    } else {
+                        Text(currentWeekDates[selectedDayIndex].formattedDate()).font(.titleText).foregroundColor(Color.black)
+                    }
+
                 }
                 Spacer()
                 Image(systemName: "calendar").foregroundColor(Color("InvisibleColor")).font(.iconText)
             }
+            .frame(height: 44)
             .padding(.horizontal, 22.0)
             .padding(.bottom, 6.0)
 
             
-            GeometryReader { geometry in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing:10) {
-                        ForEach(dates, id: \.self) { date in
-                            VStack {
-                                Text(dayOfWeekLetter(from: date))
+                        Spacer()
+                        ForEach(0..<currentWeekDates.count, id: \.self) { index in
+                            VStack(spacing: 4) {
+                                Text(currentWeekDates[index].dayOfWeekLetter())
                                     .font(.day)
-                                Text(dayOfMonth(from: date))
-                                    .font(.strongText)
+                                ZStack {
+                                    Circle().fill(selectedDayIndex == index ? Color.alternate : Color.invisible).frame(height: 35)
+                                    Text("\(currentWeekDates[index].dayOfMonth())")
+                                        .font(.strongText).foregroundStyle(selectedDayIndex == index ? Color.headerBackground : Color.alternate)
+                                }
                             }
-                            .frame(width: itemWidth(for: geometry.size.width), height: 60)
+                            .frame(width: 40)
+                            .onTapGesture {
+                                selectedDayIndex = index
+                            }
+
                         }
+                        Spacer()
                     }
                     .foregroundColor(Color("AlternateColor"))
                 }
-            }
-            .frame(height: 65)
+                .content.offset(x: 0)
+                
+                .gesture(
+                    DragGesture()
+                        .onEnded { value in
+                            let screenWidth = UIScreen.main.bounds.width
+                            let threshold = screenWidth / 3
+                            
+                            if value.translation.width < -threshold {
+                                withAnimation(.easeIn) {
+                                    nextWeek()
+                                }
+                            } else if value.translation.width > threshold {
+                                withAnimation(.easeIn) {
+                                    previousWeek()
+                                }
+                            }
+                        }
+                )
         }
+        .padding(.bottom, 8.0)
 
         
 
     }
     
-    func dayOfWeekLetter(from date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E"
-        let dayOfWeek = dateFormatter.string(from: date)
-        return String(dayOfWeek.prefix(1)).uppercased()
+    func generateWeekDates(weekOffset: Int) -> [Date] {
+        let startOfCurrentWeek = Date().startOfWeek(using: .current).addingTimeInterval(Double(weekOffset) * 7 * 24 * 60 * 60)
+        return startOfCurrentWeek.getAllDatesOfWeek()
     }
     
-    // Helper function to get the numeric day of the month
-    func dayOfMonth(from date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d"
-        return dateFormatter.string(from: date)
+    func nextWeek() {
+        currentWeekOffset += 1
+    }
+    
+    func previousWeek() {
+        currentWeekOffset -= 1
     }
     
     func itemWidth(for screenWidth: CGFloat) -> CGFloat {
@@ -78,4 +114,63 @@ struct ScheduleHeader: View {
 
 #Preview {
     ScheduleHeader()
+}
+
+extension Date {
+    func startOfWeek(using calendar: Calendar) -> Date {
+        let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
+        return calendar.date(from: components) ?? self
+    }
+    
+    func getAllDatesOfWeek(using calendar: Calendar = Calendar.current) -> [Date] {
+        let startOfWeek = self.startOfWeek(using: calendar)
+        return (0...6).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
+    }
+    
+    func dayOfMonth(using calendar: Calendar = Calendar.current) -> Int {
+        return calendar.component(.day, from: self)
+    }
+    
+    func dayOfWeekLetter(using calendar: Calendar = Calendar.current) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E"
+        let dayOfWeek = dateFormatter.string(from: self)
+        return String(dayOfWeek.prefix(1)).uppercased()
+    }
+    
+    func formattedDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yy"
+        return dateFormatter.string(from: self)
+    }
+    
+    func formattedDateNoDay() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yy"
+        return dateFormatter.string(from: self)
+    }
+
+    
+    func isSameDay(as otherDate: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: otherDate)
+    }
+    
+    func isPreviousDay(from otherDate: Date) -> Bool {
+        let calendar = Calendar.current
+        // Calculate the date for the next day from 'self'
+        if let nextDay = calendar.date(byAdding: .day, value: 1, to: self) {
+            return calendar.isDate(nextDay, inSameDayAs: otherDate)
+        }
+        return false
+    }
+    
+    func isNextDay(from otherDate: Date) -> Bool {
+        let calendar = Calendar.current
+        // Calculate the date for the previous day from 'self'
+        if let previousDay = calendar.date(byAdding: .day, value: -1, to: self) {
+            return calendar.isDate(previousDay, inSameDayAs: otherDate)
+        }
+        return false
+    }
 }

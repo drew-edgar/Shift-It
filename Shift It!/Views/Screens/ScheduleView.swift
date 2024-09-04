@@ -28,7 +28,7 @@ struct ScheduleView: View {
                             Spacer()
                             HStack {
                                 Spacer()
-                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                Button(action: {}, label: {
                                     ZStack {
                                         Circle()
                                             .frame(width: 48, height: 48)
@@ -39,7 +39,7 @@ struct ScheduleView: View {
                                     }
                                 })
                                 
-                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                Button(action: {}, label: {
                                     ZStack {
                                         Circle()
                                             .frame(width: 48, height: 48)
@@ -50,7 +50,7 @@ struct ScheduleView: View {
                                     }
                                 })
                                 
-
+                                
                             }
                             .padding(.bottom, 28)
                             .padding(.trailing, 24)
@@ -63,6 +63,7 @@ struct ScheduleView: View {
         
     }
     
+
 }
 
 

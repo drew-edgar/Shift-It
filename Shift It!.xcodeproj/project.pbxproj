@@ -12,6 +12,9 @@
 		3A9B61D32C8755D300E21B9E /* ScheduleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61D22C8755D300E21B9E /* ScheduleHeader.swift */; };
 		3A9B61D52C87600700E21B9E /* EventCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61D42C87600700E21B9E /* EventCapsule.swift */; };
 		3A9B61D72C876B7F00E21B9E /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61D62C876B7F00E21B9E /* Timeline.swift */; };
+		3A9B61D92C8772D700E21B9E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61D82C8772D700E21B9E /* Event.swift */; };
+		3A9B61DB2C87741000E21B9E /* ScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61DA2C87741000E21B9E /* ScheduleViewModel.swift */; };
+		3A9B61E02C88889800E21B9E /* DateTimeHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B61DF2C88889800E21B9E /* DateTimeHelpers.swift */; };
 		3AEFA1D32C872857002134BB /* Shift_It_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEFA1D22C872857002134BB /* Shift_It_App.swift */; };
 		3AEFA1D52C872857002134BB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEFA1D42C872857002134BB /* ContentView.swift */; };
 		3AEFA1D72C872857002134BB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEFA1D62C872857002134BB /* Item.swift */; };
@@ -28,6 +31,9 @@
 		3A9B61D22C8755D300E21B9E /* ScheduleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleHeader.swift; sourceTree = "<group>"; };
 		3A9B61D42C87600700E21B9E /* EventCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCapsule.swift; sourceTree = "<group>"; };
 		3A9B61D62C876B7F00E21B9E /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
+		3A9B61D82C8772D700E21B9E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		3A9B61DA2C87741000E21B9E /* ScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewModel.swift; sourceTree = "<group>"; };
+		3A9B61DF2C88889800E21B9E /* DateTimeHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeHelpers.swift; sourceTree = "<group>"; };
 		3AEFA1CF2C872857002134BB /* Shift It!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shift It!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AEFA1D22C872857002134BB /* Shift_It_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shift_It_App.swift; sourceTree = "<group>"; };
 		3AEFA1D42C872857002134BB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -50,6 +56,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A9B61DC2C88887400E21B9E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3A9B61DF2C88889800E21B9E /* DateTimeHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		3AEFA1C62C872857002134BB = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +83,7 @@
 		3AEFA1D12C872857002134BB /* Shift It! */ = {
 			isa = PBXGroup;
 			children = (
+				3A9B61DC2C88887400E21B9E /* Helpers */,
 				3AEFA1D82C872859002134BB /* Assets.xcassets */,
 				3AEFA1D42C872857002134BB /* ContentView.swift */,
 				3AEFA1E22C87375E002134BB /* FontStyles.swift */,
@@ -93,6 +108,7 @@
 		3AEFA1E42C87397F002134BB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3A9B61D82C8772D700E21B9E /* Event.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -109,6 +125,7 @@
 		3AEFA1E62C873A3A002134BB /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				3A9B61DA2C87741000E21B9E /* ScheduleViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -204,16 +221,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A9B61E02C88889800E21B9E /* DateTimeHelpers.swift in Sources */,
 				3AEFA1D52C872857002134BB /* ContentView.swift in Sources */,
 				3A9B61D12C8741B100E21B9E /* SettingsView.swift in Sources */,
 				3AEFA1D72C872857002134BB /* Item.swift in Sources */,
 				3AEFA1E32C87375E002134BB /* FontStyles.swift in Sources */,
+				3A9B61D92C8772D700E21B9E /* Event.swift in Sources */,
 				3A9B61D52C87600700E21B9E /* EventCapsule.swift in Sources */,
 				3A9B61CF2C8741A900E21B9E /* StreakView.swift in Sources */,
 				3AEFA1E82C873D64002134BB /* ScheduleView.swift in Sources */,
 				3A9B61D32C8755D300E21B9E /* ScheduleHeader.swift in Sources */,
 				3AEFA1D32C872857002134BB /* Shift_It_App.swift in Sources */,
 				3AEFA1EC2C873D8D002134BB /* NavBarView.swift in Sources */,
+				3A9B61DB2C87741000E21B9E /* ScheduleViewModel.swift in Sources */,
 				3A9B61D72C876B7F00E21B9E /* Timeline.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
