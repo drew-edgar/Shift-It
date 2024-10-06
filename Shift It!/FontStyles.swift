@@ -18,6 +18,9 @@ extension Font {
     static var day: Font {
         return .system(size: 16, weight: .semibold, design: .rounded)
     }
+    static var popup: Font {
+        return .system(size: 16, weight: .regular, design: .rounded)
+    }
     static var subtitle: Font {
         return .system(size: 12, weight: .regular, design: .rounded)
     }

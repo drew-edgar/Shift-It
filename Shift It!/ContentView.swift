@@ -48,6 +48,8 @@ struct ContentView: View {
 }
 
 #Preview {
+    let viewModel = ScheduleViewModel()
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Event.self, inMemory: true)
+        .environmentObject(viewModel)
 }
